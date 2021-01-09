@@ -5,8 +5,35 @@
  */
 
 /**
- * Implements hook_uninstall().
+ * Implements hook_install().
  */
-function usermerge_uninstall() {
-	variable_del('usermerge_settings');
+function usermerge_install() {
+  config_set('usermerge.settings', 'usermerge_settings', usermerge_settings_default());
+}
+
+
+/**
+ * Update User Merge variables to config settings.
+ */
+function usermerge_update_1000() {
+  $config = config('usermerge.settings');
+  $config->set('usermerge_settings', update_variable_get('usermerge_settings', usermerge_settings_default()));
+  $config->save();
+  update_variable_del('usermerge_settings');
+}
+
+
+/**
+ * Default value for User Merge settings.
+ */
+function usermerge_settings_default() {
+  $user_entity_info = entity_get_info('user');
+  $properties = $user_entity_info['schema_fields_sql']['base table'];
+  $properties[] = 'roles';
+  foreach ($properties as $property) {
+    if (!in_array($property, array('uid', 'created', 'access', 'login', 'pass', 'name', 'mail', 'init', 'data', 'roles'))) {
+      $default['core'][$property] = 0;
+    }
+  }
+  return $default;
 }

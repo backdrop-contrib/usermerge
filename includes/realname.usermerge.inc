@@ -14,6 +14,7 @@ function realname_usermerge_account_properties_alter(&$properties, $user_to_dele
   $properties['other']['items']['realname']['criterion'] = 'no_merge';
 }
 
+
 /**
  * Implements hook_usermerge_merge_accounts_alter() on behalf of realname.
  * Removes the Real Name, which will be recreated automatically.

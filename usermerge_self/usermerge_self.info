@@ -1,4 +1,5 @@
 name = Self-Serve User Merge
-description = Allows users to merge two accounts.
-core = 7.x
+description = Allows users to merge another account into their own.
+backdrop = 1.x
+type = module
 dependencies[] = usermerge

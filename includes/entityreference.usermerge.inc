@@ -53,35 +53,35 @@ function entityreference_usermerge_build_review_form_elements($review, $account_
       '#tree' => TRUE,
       '#theme' => 'usermerge_data_review_form_table',
       '#title' => t('Referencing entities (!module)', array('!module' => t('Entity Reference'))),
-      '#attributes' => array('no_merge', 'property_label' => t('Entity'))
+      '#attributes' => array('no_merge','property_label' => t('Entity')),
     );
 
     foreach ($entityreferences_user_to_delete as $entity_type => $entity_list) {
       $review['entityreference'][$entity_type]['property_name'] = array(
-          '#type' => 'markup',
-          '#markup' => $entity_type
-        );
+        '#type' => 'markup',
+        '#markup' => $entity_type,
+      );
 
       $review['entityreference'][$entity_type]['options']['user_to_delete'] = array(
         '#type' => 'markup',
-        '#markup' => format_plural(count($entity_list), '1 %entity entity to be reassigned', '@count %entity entities to be reassigned', array('%entity' => $entity_type))
+        '#markup' => format_plural(count($entity_list), '1 %entity entity to be reassigned', '@count %entity entities to be reassigned', array('%entity' => $entity_type)),
       );
 
       $review['entityreference'][$entity_type]['fields'] = array(
         '#type' => 'hidden',
-        '#value' => serialize($entities[$entity_type])
+        '#value' => serialize($entities[$entity_type]),
       );
     }
 
     foreach ($entityreferences_user_to_keep as $entity_type => $entity_list) {
       $review['entityreference'][$entity_type]['property_name'] = array(
-          '#type' => 'markup',
-          '#markup' => $entity_type
-        );
+        '#type' => 'markup',
+        '#markup' => $entity_type,
+      );
 
       $review['entityreference'][$entity_type]['options']['user_to_keep'] = array(
         '#type' => 'markup',
-        '#markup' => format_plural(count($entity_list), '1 %entity entity to be maintained', '@count %entity entities to be maintained', array('%entity' => $entity_type))
+        '#markup' => format_plural(count($entity_list), '1 %entity entity to be maintained', '@count %entity entities to be maintained', array('%entity' => $entity_type)),
       );
     }
 
@@ -92,14 +92,16 @@ function entityreference_usermerge_build_review_form_elements($review, $account_
   }
 }
 
+
 /**
  * Implement hook_usermerge_actions_supported().
  */
 function entityreference_usermerge_actions_supported($items) {
   return array(
-    'entityreference' => t('Assigning to the new user any entities (such as nodes) referencing the old user using the Entity Reference module.')
+    'entityreference' => t('Assigning to the new user any entities (such as nodes) referencing the old user using the Entity Reference module.'),
   );
 }
+
 
 /**
  * Implements hook_usermerge_merge_accounts().
@@ -122,8 +124,8 @@ function entityreference_usermerge_merge_accounts($user_to_delete, $user_to_keep
         foreach ($tables as $table_name) {
           $query = db_update($table_name)
             ->fields(array(
-                $field_name . '_target_id' => $user_to_keep->uid
-              )
+            $field_name . '_target_id' => $user_to_keep->uid,
+          )
             )
             ->condition($field_name . '_target_id', $user_to_delete->uid)
             ->execute();
@@ -132,6 +134,7 @@ function entityreference_usermerge_merge_accounts($user_to_delete, $user_to_keep
     }
   }
 }
+
 
 /**
  * Selects entities that reference users via the Entity Reference module.
