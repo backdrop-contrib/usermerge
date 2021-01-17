@@ -62,7 +62,7 @@ These modules were supported by the Drupal 7 version but have been dropped
 because there are no corresponding Backdrop modules:
 
 - Multiple E-mail (`multiple_email`)
-- Profile (`profile`); the Backdrop Profile module replaces the Drupal Profile2 module
+- Profile (`profile`); the Backdrop Profile module replaces the Drupal Profile2 module (see above)
 - RDF (`rdf`)
 - User Points (`userpoints`)
 
