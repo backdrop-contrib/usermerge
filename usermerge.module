@@ -25,7 +25,8 @@ function usermerge_permission() {
 function usermerge_menu() {
 
   $items['admin/config/people/usermerge'] = array(
-    'title' => 'User Merge',
+    'title' => 'User merge',
+    'description' => 'Configure settings for merging user accounts.',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('usermerge_settings_form'),
     'access callback' => 'user_access',
@@ -35,7 +36,8 @@ function usermerge_menu() {
 
   $items['admin/people/merge'] = array(
     'title' => 'Merge accounts',
-    'page callback' => 'usermerge_page',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('usermerge_merge_form'),
     'access callback' => 'user_access',
     'access arguments' => array('merge accounts'),
     'file' => 'usermerge.admin.inc',

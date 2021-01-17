@@ -9,11 +9,6 @@
  * Form builder for User Merge settings.
  */
 function usermerge_settings_form() {
-  backdrop_set_title('User Merge Settings');
-
-  $usermerge_settings = config_get('usermerge.settings', 'usermerge_settings');
-  $core_properties = usermerge_get_user_core_properties();
-
   $form['core'] = array(
     '#type' => 'fieldset',
     '#title' => t('Core properties'),
@@ -21,9 +16,13 @@ function usermerge_settings_form() {
     '#tree' => TRUE,
   );
 
+  $usermerge_settings = config_get('usermerge.settings', 'usermerge_settings');
+  $core_properties = usermerge_get_user_core_properties();
   foreach ($core_properties as $property) {
-    // For some properties there is never a choice
-    if (!in_array($property, array('uid', 'created', 'access', 'login', 'pass', 'init', 'data', 'roles'))) {
+    // For some properties there is never a choice of whether to display them in
+    // the review table.
+    $no_choice_properties = array('uid', 'created', 'access', 'login', 'pass', 'init', 'data', 'roles');
+    if (!in_array($property, $no_choice_properties)) {
       $form['core'][$property] = array(
         '#type' => 'checkbox',
         '#title' => $property, // No need to localize this
@@ -61,8 +60,8 @@ function usermerge_get_user_core_properties() {
   static $properties;
 
   if (empty($properties)) {
-    // Define list of fields and other user data
-    // Using the columns in the user table, so non-field data added from other modules doesn't get mixed in
+    // Define list of fields and other user data using the columns in the user
+    // table, so non-field data added from other modules doesn't get mixed in.
     $user_entity_info = entity_get_info('user');
     $properties = $user_entity_info['schema_fields_sql']['base table'];
     // Adding roles
@@ -73,17 +72,6 @@ function usermerge_get_user_core_properties() {
 }
 
 
-
-/**
- * Loads includes before calling backdrop_get_form().
- *
- * @see usermerge_merge_form()
- */
-function usermerge_page() {
-  return backdrop_get_form('usermerge_merge_form');
-}
-
-
 /**
  * Form to collect the two user IDs.
  */
@@ -91,8 +79,6 @@ function usermerge_merge_form($form, &$form_state) {
   if (!empty($form_state['form_page']) && $form_state['form_page'] == 'review_table') {
     return usermerge_data_review_form($form, $form_state);
   }
-
-  backdrop_set_title(t('Merge Accounts'));
 
   $form['supported_actions'] = array(
     '#type' => 'fieldset',
@@ -262,10 +248,11 @@ function usermerge_merge_form_submit($form, &$form_state) {
 function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) {
   module_load_include('inc', 'user', 'user.actions');
   if (usermerge_validate_merge($user_to_delete, $user_to_keep)) {
+
     // Allow modules to create a list of merged values.
     $merged_account = usermerge_invoke_all('usermerge_merge_accounts', $user_to_delete, $user_to_keep, $form_values['review']);
 
-    // This allows modules to modify the array without merging values
+    // Allow modules to modify the array without merging values.
     backdrop_alter('usermerge_merge_accounts', $merged_account, $user_to_delete, $user_to_keep);
 
     // Block or delete old account. Do this before saving the new account in
@@ -273,7 +260,9 @@ function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) 
     switch ($form_values['usermerge_user_delete_action']) {
       case 'block':
         $context = array();
-        user_block_user_action($user_to_delete, $context);
+
+// TBD temporary
+//        user_block_user_action($user_to_delete, $context);
         break;
 
       case 'delete':

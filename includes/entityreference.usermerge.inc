@@ -109,7 +109,6 @@ function entityreference_usermerge_actions_supported($items) {
 function entityreference_usermerge_merge_accounts($user_to_delete, $user_to_keep, $review) {
   if (isset($review['entityreference'])) {
     $fields = array();
-
     foreach ($review['entityreference'] as $entity_type => $entity_properties) {
       $fields = array_merge($fields, unserialize($entity_properties['fields']));
     }
@@ -131,6 +130,10 @@ function entityreference_usermerge_merge_accounts($user_to_delete, $user_to_keep
             ->execute();
         }
       }
+    }
+
+    foreach ($review['entityreference'] as $entity_type => $entity_properties) {
+      cache_clear_all('*', "cache_entity_{$entity_type}", TRUE);
     }
   }
 }

@@ -32,10 +32,10 @@ Integration with other modules is contained in module-specific files in the
 
 Modules supported out of the box:
 
-- Entity Reference
-- Profile (which is the replacement for the Drupal Profile2 module)
-- Real Name
-- User Reference (References)
+- Entity Reference (`entity_reference`)
+- Profile (`profile`), which is the replacement for the Drupal Profile2 module (`profile2`)
+- Real Name (`realname`)
+- User Reference (`user_references`), which is a submodule of References (`references`)
 
 Additional modules can be supported by providing their own
 `<module>.usermerge.inc` files. This module also provides the `usermerge_do()`
@@ -45,7 +45,7 @@ the "new" account.
 Core-specific functionality (default user properties, fields) is managed in
 `usermerge.usermerge.inc`, which also includes support for entities that have a
 `uid` column, and basic display support for non-default user properties that
-aren't structured like fields (such as `rdf_mapping`).
+aren't structured like fields (such as `metatags`).
 
 See some of the existing Backdrop `<module>_usermerge` modules for examples of
 how to integrate with this module.
@@ -61,10 +61,10 @@ Differences from Drupal 7
 These modules were supported by the Drupal 7 version but have been dropped
 because there are no corresponding Backdrop modules:
 
-- Multiple E-mail
-- Profile (the Backdrop Profile module replaces the Drupal Profile2 module)
-- RDF
-- User Points
+- Multiple E-mail (`multiple_email`)
+- Profile (`profile`); the Backdrop Profile module replaces the Drupal Profile2 module
+- RDF (`rdf`)
+- User Points (`userpoints`)
 
 Issues
 ------

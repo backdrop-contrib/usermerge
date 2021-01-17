@@ -59,7 +59,7 @@ function usermerge_usermerge_account_properties($user_to_delete, $user_to_keep, 
     foreach (array_flip($properties) as $property_name => $delta) {
       // Exclude properties that shouldn't be merged, like password
       // These could be defined via settings page
-      if (!in_array($property_name, array('pass'))) {
+      if (!in_array($property_name, array('pass', 'langcode', 'preferred_langcode', 'is_active_revision', 'path'))) {
         $account_properties[$type]['items'][$property_name] = array(
           'name' => $property_name,
           'criterion' => 'merge',
@@ -79,7 +79,7 @@ function usermerge_usermerge_account_properties($user_to_delete, $user_to_keep, 
     }
   }
 
-  // Always show uid, mail, and name, regarless of whether they can be editted.
+  // Always show uid, mail, and name, regarless of whether they can be edited.
   foreach (array('uid', 'mail', 'name') as $property_name) {
     if (isset($account_properties['core']['items'][$property_name]['default']) || $action != 'delete') {
       $account_properties['core']['items'][$property_name]['disabled'] = TRUE;
@@ -139,9 +139,8 @@ function usermerge_usermerge_account_properties($user_to_delete, $user_to_keep, 
     }
   }
 
-  // Authored entitites
+  // Authored entities
   $account_properties['entities']['title'] = t('Authored entities');
-
   foreach (usermerge_get_authorable_entities() as $entity_name => $entity) {
     $account_properties['entities']['items'][$entity_name] = array(
       'name' => $entity_name,
@@ -405,7 +404,7 @@ function usermerge_usermerge_merge_accounts($user_to_delete, $user_to_keep, $rev
                   }
                 }
                 // $user_to_delete does not have data in the field, but
-                // $user_to_keep does. No need to iterate
+                // $user_to_keep does. No need to iterate.
                 elseif (count($user_to_keep->{$property_name})) {
                   $merged_account[$property_name] = $user_to_keep->{$property_name};
                 }
@@ -417,12 +416,12 @@ function usermerge_usermerge_merge_accounts($user_to_delete, $user_to_keep, $rev
     }
   }
 
-  // Operate on entities
+  // Operate on entities.
   // Rebuild the list of entities here instead of passing as form values
   $authorable_entities = usermerge_get_authorable_entities();
 
   $entities_user_to_delete = usermerge_query_authored_entities($authorable_entities, $user_to_delete->uid);
-  // No need to find entities for $user_to_keep
+  // No need to find entities for $user_to_keep.
 
   foreach ($entities_user_to_delete as $entity_type => $entities) {
     // We take for granted that the base table has a uid column, because of usermerge_get_authorable_entities()
@@ -434,7 +433,7 @@ function usermerge_usermerge_merge_accounts($user_to_delete, $user_to_keep, $rev
       ->condition('uid', $user_to_delete->uid)
       ->execute();
 
-    // Check if the entity has a revision table
+    // Check if the entity has a revision table.
     if (isset($authorable_entities[$entity_type]['revision table'])) {
       // Find the correct column name
       // Not all revision tables have the uid stored in uid (like node_revision)

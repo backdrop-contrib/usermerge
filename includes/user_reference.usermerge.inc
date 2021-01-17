@@ -131,6 +131,10 @@ function user_reference_usermerge_merge_accounts($user_to_delete, $user_to_keep,
         }
       }
     }
+
+    foreach ($review['user_reference'] as $entity_type => $entity_properties) {
+      cache_clear_all("*", "cache_entity_{$entity_type}", TRUE);
+    }
   }
 }
 

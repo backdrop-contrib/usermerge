@@ -42,8 +42,8 @@ function usermerge_self_access($account) {
 
 
 /**
- * Form where the current user can enter user name and password
- * of the account to be removed.
+ * Form where the current user can enter user name and password of the account
+ * to be removed.
  */
 function usermerge_self_merge_form($form, &$form_state) {
   backdrop_set_title(t('Merge accounts'));
@@ -90,7 +90,8 @@ function usermerge_self_merge_form_validate($form, &$form_state) {
       form_set_error('usermerge_user_delete', t('You’re logged in using the same account you’re trying to merge. Please enter an e-mail address associated with a different account.'));
     }
     // Allow alternate password hashing schemes.
-    require_once BACKDROP_ROOT . '/' . settings_get('password_inc', 'includes/password.inc');
+    require_once BACKDROP_ROOT . '/core/includes/password.inc';
+    module_load_include('inc', 'usermerge', 'usermerge.admin');
 
     if (user_check_password($form_state['values']['usermerge_user_delete_password'], $user_to_delete)) {
       if ($user_to_delete->uid == 1) {

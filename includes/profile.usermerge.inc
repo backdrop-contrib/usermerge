@@ -87,7 +87,8 @@ function _profile_usermerge_build_review_form_elements_by_bundle($properties, $u
   $review = array(
     '#tree' => TRUE,
     '#theme' => 'usermerge_data_review_form_table',
-    '#title' => $properties['title'],
+    '#title' => t('@title (!module)',
+      array('@title' => $properties['title'], '!module' => t('Profile'))),
     '#weight' => -10,
   );
 
