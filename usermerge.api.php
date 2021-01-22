@@ -115,7 +115,7 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep, $acti
   $account_properties['core']['items']['login']['default'] = $user_to_keep->login;
   $account_properties['core']['items']['status']['default'] = $user_to_keep->status;
   $account_properties['core']['items']['timezone']['default'] = $user_to_keep->timezone;
-  $account_properties['core']['items']['language']['default'] = $user_to_keep->language;
+  $account_properties['core']['items']['langcode']['default'] = $user_to_keep->langcode;
   $account_properties['core']['items']['picture']['default'] = $user_to_keep->picture;
   $account_properties['core']['items']['init']['default'] = $user_to_keep->init;
   $account_properties['core']['items']['data']['default'] = $user_to_keep->data;
