@@ -276,10 +276,10 @@ function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) 
     }
     user_save($user_to_keep);
 
-    backdrop_set_message(t('%user_to_delete was successfully merged into %user_to_keep',
+    backdrop_set_message(t('%user_to_delete was successfully merged into !user_to_keep',
       array(
         '%user_to_delete' => $user_to_delete->name,
-        '%user_to_keep' => $user_to_keep->name)));
+        '!user_to_keep' => l($user_to_keep->name, "user/{$user_to_keep->uid}"))));
     return TRUE;
   }
   else {
