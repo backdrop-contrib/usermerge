@@ -2,5 +2,6 @@ name = User Merge
 description = Provides an advanced mechanism to merge user accounts together.
 backdrop = 1.x
 type = module
+maintainers[bugfolder] = Robert J. Lang
 
 configure = admin/config/people/usermerge
