@@ -260,9 +260,7 @@ function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) 
     switch ($form_values['usermerge_user_delete_action']) {
       case 'block':
         $context = array();
-
-// TBD temporary
-//        user_block_user_action($user_to_delete, $context);
+        user_block_user_action($user_to_delete, $context);
         break;
 
       case 'delete':
