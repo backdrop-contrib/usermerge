@@ -4,4 +4,6 @@ backdrop = 1.x
 type = module
 maintainers[bugfolder] = Robert J. Lang
 
+stylesheets[all][] = css/usermerge.css
+
 configure = admin/config/people/usermerge
