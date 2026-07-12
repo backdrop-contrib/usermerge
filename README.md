@@ -24,6 +24,9 @@ User Merge (admin/config/people/usermerge) and select which core properties of
 the user entity should be exposed in the review table. By default, no properties
 are exposed.
 
+- In the Advanced settings (collapsed by default), you can choose to match on
+the UID as well as the username of the user.
+
 Integration with Other Modules
 ------------------------------
 
@@ -50,11 +53,6 @@ aren't structured like fields (such as `metatags`).
 See some of the existing Backdrop `<module>_usermerge` modules for examples of
 how to integrate with this module.
 
-Documentation
--------------
-
-Additional documentation is located in [the Wiki](https://github.com/backdrop-contrib/usermerge/wiki/Documentation).
-
 Differences from Drupal 7
 -------------------------
 
@@ -65,6 +63,9 @@ because there are no corresponding Backdrop modules:
 - Profile (`profile`); the Backdrop Profile module replaces the Drupal Profile2 module (see above)
 - RDF (`rdf`)
 - User Points (`userpoints`)
+
+The Drupal 7 module matched only on the user name itself. The Backdrop module
+lets you optionally match on the UID of the user.
 
 Issues
 ------

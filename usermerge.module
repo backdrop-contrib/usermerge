@@ -34,6 +34,16 @@ function usermerge_menu() {
     'file' => 'usermerge.admin.inc',
   );
 
+  $items['usermerge/autocomplete'] = array(
+    'title' => 'User autocomplete',
+    'page callback' => 'usermerge_autocomplete',
+    'delivery callback' => 'backdrop_json_deliver',
+    'access callback' => 'user_access',
+    'access arguments' => array('access user profiles'),
+    'type' => MENU_CALLBACK,
+    'file' => 'usermerge.admin.inc',
+  );
+
   $items['admin/people/merge'] = array(
     'title' => 'Merge accounts',
     'page callback' => 'backdrop_get_form',
@@ -279,6 +289,10 @@ function usermerge_module_implements($hook) {
 function usermerge_config_info() {
   $prefixes['usermerge.settings'] = array(
     'label' => t('User Merge settings'),
+    'group' => t('Configuration'),
+  );
+  $prefixes['usermerge.advanced.settings'] = array(
+    'label' => t('User Merge advanced settings'),
     'group' => t('Configuration'),
   );
   return $prefixes;
