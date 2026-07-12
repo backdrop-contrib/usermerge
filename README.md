@@ -41,7 +41,7 @@ Modules supported out of the box:
 - User Reference (`user_references`), which is a submodule of References (`references`)
 
 Additional modules can be supported by providing their own
-`<module>.usermerge.inc` files. This module also provides the `usermerge_do()`
+`MODULE.usermerge.inc` files. This module also provides the `usermerge_do()`
 function, which, given two user objects, merges them preserving information from
 the "new" account.
 
@@ -50,7 +50,7 @@ Core-specific functionality (default user properties, fields) is managed in
 `uid` column, and basic display support for non-default user properties that
 aren't structured like fields (such as `metatags`).
 
-See some of the existing Backdrop `<module>_usermerge` modules for examples of
+See some of the existing Backdrop `MODULE_usermerge` modules for examples of
 how to integrate with this module.
 
 Differences from Drupal 7
