@@ -92,7 +92,6 @@ function entityreference_usermerge_build_review_form_elements($review, $account_
   }
 }
 
-
 /**
  * Implement hook_usermerge_actions_supported().
  */
@@ -101,7 +100,6 @@ function entityreference_usermerge_actions_supported($items) {
     'entityreference' => t('Assigning to the new user any entities (such as nodes) referencing the old user using the Entity Reference module.'),
   );
 }
-
 
 /**
  * Implements hook_usermerge_merge_accounts().
@@ -137,7 +135,6 @@ function entityreference_usermerge_merge_accounts($user_to_delete, $user_to_keep
     }
   }
 }
-
 
 /**
  * Selects entities that reference users via the Entity Reference module.

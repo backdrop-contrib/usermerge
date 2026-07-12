@@ -91,7 +91,6 @@ function user_reference_usermerge_build_review_form_elements($review, $account_p
   }
 }
 
-
 /**
  * Implements hook_usermerge_actions_supported().
  */
@@ -100,7 +99,6 @@ function user_reference_usermerge_actions_supported($items) {
     'user_reference' => t('Assigning to the new user any entities (such as nodes) referencing the old user using the References (User Reference) module.'),
   );
 }
-
 
 /**
  * Implements hook_usermerge_merge_accounts().
@@ -137,7 +135,6 @@ function user_reference_usermerge_merge_accounts($user_to_delete, $user_to_keep,
     }
   }
 }
-
 
 /**
  * Selects entities that reference users via the References module.

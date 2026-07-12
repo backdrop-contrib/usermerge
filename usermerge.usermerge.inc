@@ -14,7 +14,6 @@ function usermerge_usermerge_actions_supported() {
   );
 }
 
-
 /**
  * Implements hook_usermerge_account_properties().
  */
@@ -150,7 +149,6 @@ function usermerge_usermerge_account_properties($user_to_delete, $user_to_keep, 
 
   return $account_properties;
 }
-
 
 /**
  * Implements hook_usermerge_build_review_form_elements().
@@ -321,7 +319,6 @@ function usermerge_usermerge_build_review_form_elements($review, $account_proper
   return $review;
 }
 
-
 /**
  * Selects entities with a uid column.
  */
@@ -339,7 +336,6 @@ function usermerge_get_authorable_entities() {
 
   return $entities;
 }
-
 
 /**
  * Selects entities whose uid matches the selected user.
@@ -360,7 +356,6 @@ function usermerge_query_authored_entities($entities, $user_id) {
   backdrop_alter('usermerge_query_authored_entities', $found_entities, $entities, $user_id);
   return $found_entities;
 }
-
 
 /**
  * Implements hook_usermerge_merge_accounts().

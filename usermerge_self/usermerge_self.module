@@ -15,7 +15,6 @@ function usermerge_self_permission() {
   );
 }
 
-
 /**
  * Implements hook_menu().
  */
@@ -32,14 +31,12 @@ function usermerge_self_menu() {
   return $items;
 }
 
-
 /**
  * Access callback for Self-Serve User Merge.
  */
 function usermerge_self_access($account) {
   return (($GLOBALS['user']->uid == $account->uid) && user_access('merge own accounts'));
 }
-
 
 /**
  * Form where the current user can enter user name and password of the account
@@ -76,7 +73,6 @@ function usermerge_self_merge_form($form, &$form_state) {
   return $form;
 }
 
-
 /**
  * Validates the self-serve user merge form.
  */
@@ -107,7 +103,6 @@ function usermerge_self_merge_form_validate($form, &$form_state) {
   }
 }
 
-
 /**
  * Submits the self-serve user merge form.
  *
@@ -123,7 +118,6 @@ function usermerge_self_merge_form_submit($form, &$form_state) {
 
   usermerge_do($user_to_delete, $user_to_keep);
 }
-
 
 /**
  * Fetches a user object by email address, using multiple_email when available.

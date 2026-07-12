@@ -22,7 +22,6 @@ function hook_usermerge_actions_supported() {
   );
 }
 
-
 /**
  * Define which properties of the user account will be merged.
  *
@@ -151,7 +150,6 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep, $acti
   return $account_properties;
 }
 
-
 /**
  * Perform alterations to the list of properties before it's displayed.
  *
@@ -172,7 +170,6 @@ function hook_usermerge_account_properties_alter(&$properties, $user_to_delete, 
   // Sets the default to the value of $user_to_keep
   $properties['other']['items']['rdf_mapping']['default'] = $user_to_keep->rdf_mapping;
 }
-
 
 /**
  * Build elements of the review table.
@@ -220,7 +217,6 @@ function hook_usermerge_build_review_form_elements($review, $account_properties,
 
   return $review;
 }
-
 
 /**
  * Merge specific account properties.
@@ -271,7 +267,6 @@ function hook_usermerge_merge_accounts($user_to_delete, $user_to_keep, $review) 
   }
 }
 
-
 /**
  * Alter merged data before saving account.
  *
@@ -292,7 +287,6 @@ function hook_usermerge_merge_accounts_alter($merged_account, $user_to_delete, $
 
   return $merged_account;
 }
-
 
 /**
  * Alter authored entities which are automatically merged.

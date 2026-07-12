@@ -18,7 +18,6 @@ function usermerge_permission() {
   );
 }
 
-
 /**
  * Implements hook_menu().
  */
@@ -57,7 +56,6 @@ function usermerge_menu() {
   return $items;
 }
 
-
 /**
  * Implements hook_theme().
  */
@@ -68,7 +66,6 @@ function usermerge_theme() {
 
   return $theme;
 }
-
 
 /**
  * Returns HTML for each data-review table.
@@ -114,7 +111,6 @@ function theme_usermerge_data_review_form_table($variables) {
     (isset($element['#description']) ? "<p>" . $element['#description'] . "</p>\n" : '') .
     theme('table', $table);
 }
-
 
 /**
  * Merges two accounts automatically, making decisions on which data should
@@ -185,7 +181,6 @@ function usermerge_do($user_to_delete, $user_to_keep) {
   backdrop_form_submit('usermerge_merge_form', $review_form_state);
 }
 
-
 /**
  * Implements hook_hook_info().
  */
@@ -214,7 +209,6 @@ function usermerge_hook_info() {
   return $hooks;
 }
 
-
 /**
  * Calls all includes.
  *
@@ -231,7 +225,6 @@ function usermerge_load_includes() {
     }
   }
 }
-
 
 /**
  * Invokes a hook in all enabled modules that implement it.
@@ -261,7 +254,6 @@ function usermerge_invoke_all($hook) {
   return $return;
 }
 
-
 /**
  * Determines which modules are implementing a hook.
  *
@@ -281,7 +273,6 @@ function usermerge_module_implements($hook) {
 
   return $modules;
 }
-
 
 /**
  * Implements hook_config_info().

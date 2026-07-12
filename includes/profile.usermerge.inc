@@ -14,7 +14,6 @@ function profile_usermerge_actions_supported() {
   );
 }
 
-
 /**
  * Implements hook_usermerge_account_properties().
  */
@@ -50,7 +49,6 @@ function profile_usermerge_account_properties($user_to_delete, $user_to_keep, $a
   return array('profile' => $account_properties);
 }
 
-
 /**
  * Implements hook_usermerge_build_review_form_elements().
  */
@@ -65,7 +63,6 @@ function profile_usermerge_build_review_form_elements($review, $account_properti
 
   return $review;
 }
-
 
 /**
  * Pass in review elements per bundle.
@@ -147,7 +144,6 @@ function _profile_usermerge_build_review_form_elements_by_bundle($properties, $u
   return $review;
 }
 
-
 /**
  * Process all fields.
  *
@@ -191,7 +187,6 @@ function _profile_usermerge_process_field($profile, $name) {
   return $ret;
 }
 
-
 /**
  * Implements hook_usermerge_merge_accounts().
  */
@@ -205,7 +200,6 @@ function profile_usermerge_merge_accounts($user_to_delete, $user_to_keep, $revie
     _profile_usermerge_merge_accounts_by_bundle($bundle, $user_to_delete, $user_to_keep, $options);
   }
 }
-
 
 /**
  * Merge accounts by profile bundle name.
@@ -302,7 +296,6 @@ function _profile_usermerge_merge_accounts_by_bundle($bundle, $user_to_delete, $
   // Delete the profile for the deleted user.
   profile_delete($profile_delete);
 }
-
 
 /**
  * Implements hook_usermerge_query_authored_entities_alter().
