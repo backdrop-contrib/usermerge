@@ -11,7 +11,6 @@ function usermerge_install() {
   config_set('usermerge.settings', 'usermerge_settings', usermerge_settings_default());
 }
 
-
 /**
  * Update User Merge variables to config settings.
  */
@@ -22,6 +21,12 @@ function usermerge_update_1000() {
   update_variable_del('usermerge_settings');
 }
 
+/**
+ * Add advanced User Merge settings for matching on UID to config.
+ */
+function usermerge_update_1001() {
+  config_set('usermerge.advanced.settings', 'match_uid', FALSE);
+}
 
 /**
  * Default value for User Merge settings.

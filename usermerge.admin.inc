@@ -4,7 +4,6 @@
  * Admin pages for the User Merge module.
  */
 
-
 /**
  * Form builder for User Merge settings.
  */
@@ -31,6 +30,19 @@ function usermerge_settings_form() {
     }
   }
 
+  $form['advanced'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Advanced'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['advanced']['match_uid'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Match UID'),
+    '#description' => t('Allow matching on the UID as well as the name of user accounts on the merge form.'),
+    '#default_value' => config_get('usermerge.advanced.settings', 'match_uid'),
+  );
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save configuration'),
@@ -39,19 +51,20 @@ function usermerge_settings_form() {
   return $form;
 }
 
-
 /**
  * Submit handler for the  User Merge settings form.
  */
 function usermerge_settings_form_submit($form, &$form_state) {
   form_state_values_clean($form_state);
   foreach ($form_state['values'] as $type => $values) {
-    $usermerge_settings[$type] = $values;
+    if ($type != 'match_uid') {
+      $usermerge_settings[$type] = $values;
+    }
   }
   config_set('usermerge.settings', 'usermerge_settings', $usermerge_settings);
+  config_set('usermerge.advanced.settings', 'match_uid', $form_state['values']['match_uid']);
   backdrop_set_message('The User Merge settings have been saved.');
 }
-
 
 /**
  * Returns an array of the core properties for the user entity.
@@ -70,7 +83,6 @@ function usermerge_get_user_core_properties() {
 
   return $properties;
 }
-
 
 /**
  * Form to collect the two user IDs.
@@ -95,17 +107,18 @@ function usermerge_merge_form($form, &$form_state) {
     '#items' => $supported_actions,
   );
 
+  $match_uid = config_get('usermerge.advanced.settings', 'match_uid');
   $form['general']['usermerge_user_delete'] = array(
     '#type' => 'textfield',
-    '#title' => t('The name of the account you wish to remove'),
-    '#autocomplete_path' => 'user/autocomplete',
+    '#title' => $match_uid ? t('The name or uid of the account you wish to remove') : t('The name of the account you wish to remove'),
+    '#autocomplete_path' => 'usermerge/autocomplete',
     '#required' => TRUE,
   );
 
   $form['general']['usermerge_user_keep'] = array(
     '#type' => 'textfield',
-    '#title' => t('The name of the account you wish to keep'),
-    '#autocomplete_path' => 'user/autocomplete',
+    '#title' => $matchuid ? t('The name or uid of the account you wish to keep') : t('The name of the account you wish to keep'),
+    '#autocomplete_path' => 'usermerge/autocomplete',
     '#required' => TRUE,
   );
 
@@ -119,12 +132,88 @@ function usermerge_merge_form($form, &$form_state) {
   $form['general']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Review account data'),
+    '#validate' => array('usermerge_merge_form_validate'),
     '#submit' => array('usermerge_merge_form_submit'),
   );
 
   return $form;
 }
 
+/**
+ * Menu callback; retrieve a JSON object containing autocomplete suggestions for
+ * existing users.
+ *
+ * @see user_autocomplete()
+ */
+function usermerge_autocomplete($string = '') {
+  $matches = array();
+  if ($string) {
+    $match_uid = config_get('usermerge.advanced.settings', 'match_uid');
+    $select = db_select('users')
+      ->fields('users', array('name', 'uid'));
+    if ($match_uid) {
+      $select->condition(db_or()
+        ->condition('name', db_like($string) . '%', 'LIKE')
+        ->condition('uid', db_like($string) . '%', 'LIKE')
+      );
+    }
+    else {
+      $select->condition('name', db_like($string) . '%', 'LIKE');
+    }
+    $result = $select
+      ->range(0, 10)
+      ->execute();
+    foreach ($result as $account) {
+      if ($match_uid) {
+        $match = $account->name . ' | ' . $account->uid;
+      }
+      else {
+        $match = $account->name;
+      }
+      $matches[$match] = check_plain($match);
+    }
+  }
+
+  // Displayed as JSON by delivery callback backdrop_json_deliver().
+  return $matches;
+}
+
+/**
+ * Validates contents of form for user validation.
+ */
+function usermerge_merge_form_validate($form, &$form_state) {
+  // Validate first step
+  if (!isset($form_state['form_page'])) {
+    $user_keep_raw = $form_state['values']['usermerge_user_keep'];
+    $user_delete_raw = $form_state['values']['usermerge_user_delete'];
+
+    if (config_get('usermerge.advanced.settings', 'match_uid')) {
+      $user_keep_parts = array_map('trim', explode('|', $user_keep_raw));
+      $user_keep = $user_keep_parts[0];
+      $user_delete_parts = array_map('trim', explode('|', $user_delete_raw));
+      $user_delete = $user_delete_parts[0];
+    }
+    else {
+      $user_keep = $user_keep_raw;
+      $user_delete = $user_delete_raw;
+    }
+
+    // Can't be the same user.
+    if ($user_keep == $user_delete) {
+      form_set_error('usermerge_user', 'You cannot have the same username in both fields.');
+    }
+
+    $user_to_delete = user_load_multiple(array(), array('name' => $user_delete));
+    $user_to_keep = user_load_multiple(array(), array('name' => $user_keep));
+
+    // Load up the users. We store these in the form_state['values'] so that we don't have to load again later.
+    $form_state['values']['user_to_delete'] = array_shift($user_to_delete);
+    $form_state['values']['user_to_keep'] = array_shift($user_to_keep);
+
+    // Use the validate helper function.
+    usermerge_validate_merge($form_state['values']['user_to_delete'], $form_state['values']['user_to_keep']);
+  }
+}
 
 /**
  * Form that allows the selection of data to be merged.
@@ -158,31 +247,6 @@ function usermerge_data_review_form($form, &$form_state) {
   return $form;
 }
 
-
-/**
- * Validates contents of form for user validation.
- */
-function usermerge_merge_form_validate($form, &$form_state) {
-  // Validate first step
-  if (!isset($form_state['form_page'])) {
-    // Can't be the same user.
-    if ($form_state['values']['usermerge_user_keep'] == $form_state['values']['usermerge_user_delete']) {
-      form_set_error('usermerge_user', 'You cannot have the same username in both fields.');
-    }
-
-    $user_to_delete = user_load_multiple(array(), array('name' => $form_state['values']['usermerge_user_delete']));
-    $user_to_keep = user_load_multiple(array(), array('name' => $form_state['values']['usermerge_user_keep']));
-
-    // Load up the users. We store these in the form_state['values'] so that we don't have to load again later.
-    $form_state['values']['user_to_delete'] = array_shift($user_to_delete);
-    $form_state['values']['user_to_keep'] = array_shift($user_to_keep);
-
-    // Use the validate helper function.
-    usermerge_validate_merge($form_state['values']['user_to_delete'], $form_state['values']['user_to_keep']);
-  }
-}
-
-
 /**
  * Helper validation function used by the form submit and the API.
  *
@@ -211,7 +275,6 @@ function usermerge_validate_merge($user_to_delete, $user_to_keep) {
   return $valid;
 }
 
-
 /**
  * Displays the userdata-review form, or merges the selected accounts.
  */
@@ -231,7 +294,6 @@ function usermerge_merge_form_submit($form, &$form_state) {
     usermerge_merge_accounts($form_state['page_values']['merge_form']['user_to_delete'], $form_state['page_values']['merge_form']['user_to_keep'], $form_state['values']);
   }
 }
-
 
 /**
  * Merges the selected accounts.
@@ -284,7 +346,6 @@ function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) 
     return FALSE;
   }
 }
-
 
 /**
  * Returns a list of actions to perform on the removed user.
