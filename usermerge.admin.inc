@@ -117,7 +117,7 @@ function usermerge_merge_form($form, &$form_state) {
 
   $form['general']['usermerge_user_keep'] = array(
     '#type' => 'textfield',
-    '#title' => $matchuid ? t('The name or uid of the account you wish to keep') : t('The name of the account you wish to keep'),
+    '#title' => $match_uid ? t('The name or uid of the account you wish to keep') : t('The name of the account you wish to keep'),
     '#autocomplete_path' => 'usermerge/autocomplete',
     '#required' => TRUE,
   );
